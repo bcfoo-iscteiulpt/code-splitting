@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Page1 from './components/Page1';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [route, setRoute] = useState('page1')
+  const [Component, setComponent] = useState()
+  const handlePage = (p, r) => {
+    setComponent(p)
+    setRoute(r)
+  }
+  const onRouteChange = newRoute => {
+    if (newRoute === 'page1') {
+      setRoute(newRoute)
+    } else if (newRoute === 'page2') {
+      import('./components/Page2').then(Page2 => handlePage(Page2, newRoute))
+    } else if (newRoute === 'page3') {
+      import('./components/Page3').then(Page3 => handlePage(Page3, newRoute))
+    }
+  }
+  const pagesConfig = {onRouteChange}
+  switch (route) {
+    case 'page1':
+      return <Page1 {...pagesConfig} />
+    default:
+      return <Component.default {...pagesConfig} />;
+  }
 }
 
 export default App;
